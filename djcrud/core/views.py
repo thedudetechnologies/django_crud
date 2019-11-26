@@ -1,7 +1,7 @@
-from django.shortcuts import render , redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import logout, authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from .forms import SignUpForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -14,17 +14,16 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('index')
     else:
         form = SignUpForm()
     return render(request, 'register.html', {'form': form})
 
-
-
+@login_required(login_url='login/')
 def home(request):
-    
+    user = request.user
+    content = {}
+    content['user'] = user
 
-    return render(request, "home.html")
 
-
-
+    return render(request, "index.html",content)

@@ -1,7 +1,7 @@
 {% extends 'top.html' %}
 
 
-{% block title %} Add Product {% endblock %}
+{% block title %} Update Product {% endblock %}
 
 {%block address %}
   <!-- Breadcrumbs-->
@@ -9,7 +9,7 @@
     <li class="breadcrumb-item">
       <a href="{% url 'index' %}">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active">Add Product</li>
+    <li class="breadcrumb-item active">Update Product</li>
   </ol>
 {% endblock %}
 
@@ -21,21 +21,20 @@
           {% csrf_token %}
         <div class="form-group">
             <label class="col-sm-2 control-label">Product Name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Product Name" name="product_name" required >
+            <div class="col-sm-10" style="max-width:36.3333%;">
+                <input type="text" class="form-control" placeholder="Product Name" name="product_name" value="{{product_name}}" required >
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Add Image</label>
-            <div class="col-sm-10">
+            <label class="col-sm-2 control-label"> Update Image</label>
+            <img src="{{file_name.url}}"  height="100px" width="200px"></td><br>
+            <div class="col-sm-10" style="max-width:36.3333%;">
                 <div class="form-control">
-                    <label for="inputFile-2">
-                                <span class="btn btn-danger dark-input-button">
-                                    <input type="file" name="file_name" required>
-                                    <i class="fa fa-file-archive-o"></i>
-                                </span>
-                    </label>
+                    <span class="btn dark-input-button">
+                        <input type="file" name="file_name" >
+                        <i class="fa fa-file-archive-o"></i>
+                    </span>
                 </div>
             </div>
         </div>
@@ -43,9 +42,9 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Category</label>
-            <div class="col-sm-10">
+            <div class="col-sm-10" style="max-width:36.3333%;">
              <select name="category" class="form-control" required>
-                    <option value="">--- Select ---</option>
+                    <option value="{{category.id}}">{{category.cat_name}}</option>
                     {% for i in cat_data%}
                     <option value="{{i.id}}">{{i.cat_name}}</option>
                     {% endfor %}
@@ -56,14 +55,14 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Product Descriptions</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" rows="3" placeholder="Add Descriptions..." name="product_details"></textarea>
+            <div class="col-sm-10" style="max-width:36.3333%;">
+                <textarea class="form-control" rows="3" placeholder="Add Descriptions..." name="product_details">{{description}}</textarea>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-lg btn-primary" name="btn_update">Add</button>
+                <button type="submit" class="btn btn-lg btn-primary" name="btn_update">Update</button>
             </div>
         </div>
     </form>

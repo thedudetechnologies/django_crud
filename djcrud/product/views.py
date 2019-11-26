@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect
-from .models import Category, Product
 from datetime import datetime
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
 from .forms import CategoryForm
+from .models import Category, Product
 
 
+@login_required(login_url='login/')
 # Create your views here.
 def add_category(request):
     user = request.user
@@ -35,7 +39,7 @@ def edit_cat(request, id):
     # import pdb; pdb.set_trace()
     check = Category.objects.filter(user=user, id=id)
     content = {}
-    cat_form = CategoryForm(initial={'cat_name': check[0].cat_name })
+    cat_form = CategoryForm(initial={'cat_name': check[0].cat_name})
     content['btn_name'] = 'Update'
 
     if request.method == 'POST':
@@ -62,7 +66,7 @@ def edit_cat(request, id):
 
 def destroy_cat(request, id):
     user = request.user
-    cat_to_del = Category.objects.filter(id=id,user=user)
+    cat_to_del = Category.objects.filter(id=id, user=user)
     cat_to_del.delete()
 
     return redirect('categories')
@@ -71,37 +75,82 @@ def destroy_cat(request, id):
 def show_product(request):
     user = request.user
     content = {}
+    cat_data = Category.objects.filter(user=user)
     product = Product.objects.filter(user=user)
     content['product'] = product
+    content['cat_data'] = cat_data
 
-    return render(request,'view_product.html',content)
+    return render(request, 'view_product.html', content)
 
 
 def add_product(request):
     user = request.user
     cat_data = Category.objects.filter(user=user)
     content = {}
-    msg = ''
-    content['cat_data'] =cat_data
+    msg = 'status'
+    content['cat_data'] = cat_data
     if request.method == 'POST':
+        # import pdb;
+        # pdb.set_trace()
         category = Category.objects.get(id=request.POST['category'])
         product_name = request.POST['product_name']
         image = request.FILES['file_name']
-        category = category
+        # category = category
         descriptions = request.POST['product_details']
-        check = Product.objects.filter(user=user,product_name=product_name)
+        check = Product.objects.filter(user=user, product_name=product_name)
         if check:
             msg = 'Product Already Added'
         else:
-            Product.objects.create(user=user, product_name=product_name, image=image, category=category, description=descriptions)
+            Product.objects.create(user=user, product_name=product_name, image=image, category=category,
+                                   description=descriptions)
             msg = 'Product Added Successfully'
         content['msg'] = msg
 
-    return render(request,'add_update.html', content)
+    return render(request, 'add_update.html', content)
 
 
 def edit_product(request, id):
-    pass
+    # import pdb; pdb.set_trace()
+    user = request.user
+    check = Product.objects.filter(user=user, id=id)
+    cat_data = Category.objects.filter(user=user)
+    content = {}
+    msg = ''
+    # Content providing
+    content['product_name'] = check[0].product_name
+    content['file_name'] = check[0].image
+    # cat_name = Category.objects.get(id=check[0].category.id)
+    content['category'] = check[0].category
+    content['description'] = check[0].description
+    content['cat_data'] = cat_data
+
+    if request.method == 'POST':
+        # import pdb; pdb.set_trace()
+        product_name = request.POST['product_name']
+        image = request.FILES['file_name']
+        category = request.POST['category']
+        description = request.POST['product_details']
+
+        dtnow = datetime.now()
+        dtformat = datetime.strftime(dtnow, '%Y-%m-%d')
+        # check2 = Product.objects.filter(user=user, product_name=product_name)
+        if check and image:
+            check.update(id=id, user=user, product_name=product_name, image=image, category=category,
+                         description=description, updated=dtformat)
+            print("Update with Image")
+            return redirect('crud_product')
+        elif check and not image:
+            check.update(id=id, user=user, product_name=product_name, category=category,
+                         description=description, updated=dtformat)
+            return redirect('crud_product')
+            print("Update with No Image Update")
+
+        else:
+            msg = 'Product Already Available'
+            print("No  Update")
+        content['msg'] = msg
+
+    return render(request, 'updates.html', content)
 
 
 def destroy_product(request, id):
@@ -109,5 +158,3 @@ def destroy_product(request, id):
     prod_to_del.delete()
 
     return redirect('crud_product')
-
-
