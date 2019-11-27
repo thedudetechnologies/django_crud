@@ -112,42 +112,56 @@ def add_product(request):
 def edit_product(request, id):
     # import pdb; pdb.set_trace()
     user = request.user
-    check = Product.objects.filter(user=user, id=id)
+    product = Product.objects.filter(user=user, id=id).first()
     cat_data = Category.objects.filter(user=user)
     content = {}
     msg = ''
     # Content providing
-    content['product_name'] = check[0].product_name
-    content['file_name'] = check[0].image
-    # cat_name = Category.objects.get(id=check[0].category.id)
-    content['category'] = check[0].category
-    content['description'] = check[0].description
+    content['product_name'] = product.product_name
+    content['file_name'] = product.image
+    # cat_name = Category.objects.get(id=product[0].category.id)
+    content['category'] = product.category
+    content['description'] = product.description
     content['cat_data'] = cat_data
 
     if request.method == 'POST':
-        # import pdb; pdb.set_trace()
-        product_name = request.POST['product_name']
-        image = request.FILES['file_name']
-        category = request.POST['category']
-        description = request.POST['product_details']
-
+        # # import pdb; pdb.set_trace()
+        # product_name = request.POST['product_name']
+        image = request.FILES['file_name'] if 'file_name' in request.FILES else False
+        # category = request.POST['category']
+        # description = request.POST['product_details']
         dtnow = datetime.now()
-        dtformat = datetime.strftime(dtnow, '%Y-%m-%d')
         # check2 = Product.objects.filter(user=user, product_name=product_name)
-        if check and image:
-            check.update(id=id, user=user, product_name=product_name, image=image, category=category,
-                         description=description, updated=dtformat)
-            print("Update with Image")
-            return redirect('crud_product')
-        elif check and not image:
-            check.update(id=id, user=user, product_name=product_name, category=category,
-                         description=description, updated=dtformat)
-            return redirect('crud_product')
-            print("Update with No Image Update")
+        if request.POST['product_name']:
+            product.product_name = request.POST['product_name']
+        if image:
+            product.image = request.FILES['file_name']
+        if request.POST['category']:
+            cat = Category.objects.get(id=int(request.POST['category']))
+            product.category = cat
+        if request.POST['product_details']:
+            product.description = request.POST['product_details']
 
-        else:
-            msg = 'Product Already Available'
-            print("No  Update")
+        product.updated = dtnow
+        product.save()
+        return redirect('crud_product')
+        # print("Saved Msg",saved)
+
+        # return redirect('crud_product')
+        # if product and image:
+        #     product.update(product_name=product_name, image=image, category=category,
+        #                  description=description, updated=dtformat)
+        #     print("Update with Image")
+        #     return redirect('crud_product')
+        # elif product and not image:
+        #     product.update(id=id, user=user, product_name=product_name, category=category,
+        #                  description=description, updated=dtformat)
+        #     return redirect('crud_product')
+        #     print("Update with No Image Update")
+        #
+        # else:
+        #     msg = 'Product Already Available'
+        #     print("No  Update")
         content['msg'] = msg
 
     return render(request, 'updates.html', content)
