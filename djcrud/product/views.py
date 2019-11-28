@@ -119,19 +119,15 @@ def edit_product(request, id):
     # Content providing
     content['product_name'] = product.product_name
     content['file_name'] = product.image
-    # cat_name = Category.objects.get(id=product[0].category.id)
     content['category'] = product.category
     content['description'] = product.description
     content['cat_data'] = cat_data
 
     if request.method == 'POST':
-        # # import pdb; pdb.set_trace()
-        # product_name = request.POST['product_name']
+
         image = request.FILES['file_name'] if 'file_name' in request.FILES else False
-        # category = request.POST['category']
-        # description = request.POST['product_details']
         dtnow = datetime.now()
-        # check2 = Product.objects.filter(user=user, product_name=product_name)
+
         if request.POST['product_name']:
             product.product_name = request.POST['product_name']
         if image:
@@ -145,23 +141,7 @@ def edit_product(request, id):
         product.updated = dtnow
         product.save()
         return redirect('crud_product')
-        # print("Saved Msg",saved)
 
-        # return redirect('crud_product')
-        # if product and image:
-        #     product.update(product_name=product_name, image=image, category=category,
-        #                  description=description, updated=dtformat)
-        #     print("Update with Image")
-        #     return redirect('crud_product')
-        # elif product and not image:
-        #     product.update(id=id, user=user, product_name=product_name, category=category,
-        #                  description=description, updated=dtformat)
-        #     return redirect('crud_product')
-        #     print("Update with No Image Update")
-        #
-        # else:
-        #     msg = 'Product Already Available'
-        #     print("No  Update")
         content['msg'] = msg
 
     return render(request, 'updates.html', content)
