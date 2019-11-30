@@ -45,7 +45,6 @@ def user_logged_in_callback(sender, request, user, **kwargs):
         headers = request.headers
 
         session_exist = LoginLog.objects.filter(user=request.user, ip=ip, action=LOGIN)
-        print("--------------------------------->", sessionexist)
         if not session_exist:
             LoginLog.objects.create(action=LOGIN, ip=ip, user=user,
                                     browser_string=browser_string,
@@ -63,10 +62,6 @@ def user_logged_out_callback(sender, request, user, **kwargs):
         exist = LoginLog.objects.filter(user=user, ip=ip, action=LOGIN)
 
         exist.update(action=LOGOUT, logout=datetime.now())
-        # LoginLog.objects.create(action='user_logged_out',ip=ip, user=user,
-        #                         logout=logout,
-        #                         browser_string=browser_string,
-        #                         city=city,
-        #                         session_id=session_id)
+
     except Exception as e:
         print("Exception Occurs :", e)

@@ -25,7 +25,7 @@ SECRET_KEY = 'y=0@m(*z=_3uhf3ik&#r#8*8t^zfawvkhzk@z!7yo@7+8th#@c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
     'product',
 ]
 
@@ -106,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
+GEOIP_PATH =os.path.join(BASE_DIR, 'geoip/')
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
