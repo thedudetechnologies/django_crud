@@ -45,7 +45,7 @@ def user_logged_in_callback(sender, request, user, **kwargs):
         headers = request.headers
 
         session_exist = LoginLog.objects.filter(user=request.user, ip=ip, action=LOGIN)
-        print("--------------------------------->", sessionexist)
+        print("--------------------------------->", session_exist)
         if not session_exist:
             LoginLog.objects.create(action=LOGIN, ip=ip, user=user,
                                     browser_string=browser_string,

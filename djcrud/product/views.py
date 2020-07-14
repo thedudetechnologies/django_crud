@@ -152,3 +152,4 @@ def destroy_product(request, id):
     prod_to_del.delete()
 
     return redirect('crud_product')
+

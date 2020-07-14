@@ -11,8 +11,9 @@ urlpatterns = [
     # path('', include('core.urls')),
 
     # authentication urls
-    path('login/', auth_views.LoginView.as_view(template_name='login.html',redirect_authenticated_user=True), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='login.html'), name='logout'),
-    path('',views.home, name='index'),
-    path('register/',views.signup, name='register')
+    # path('login/', auth_views.LoginView.as_view(template_name='login.html',redirect_authenticated_user=True), name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(template_name='login.html'), name='logout'),
+    # path('',views.home, name='index'),
+    # path('', views.capture , name='index')
+    # path('register/',views.signup, name='register')
 ]
