@@ -6,7 +6,6 @@ geoip2==3.0.0
 idna==2.8
 maxminddb==1.5.2
 Pillow==7.0.0
-pkg-resources==0.0.0
 psycopg2==2.8.4
 pycodestyle==2.6.0
 pytz==2019.3
