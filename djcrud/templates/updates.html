@@ -44,9 +44,12 @@
             <label class="col-sm-2 control-label">Category</label>
             <div class="col-sm-10" style="max-width:36.3333%;">
              <select name="category" class="form-control" required>
-                    <option value="{{category.id}}">{{category.cat_name}}</option>
+                    <!-- <option value="{{category.id}}">{{category.cat_name}}</option> -->
                     {% for i in cat_data%}
-                    <option value="{{i.id}}">{{i.cat_name}}</option>
+                    {% if i == category.id  %}
+                        <option value="{{i.id}}" selected="true">{{i.cat_name}}</option>
+                    {% endif %}
+                        <option value="{{i.id}}">{{i.cat_name}}</option>
                     {% endfor %}
             </select>
             </div>
