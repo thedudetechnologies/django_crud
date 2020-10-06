@@ -3,7 +3,7 @@
 
 {% block title %} Update Product {% endblock %}
 
-{%block address %}
+{% block address %}
   <!-- Breadcrumbs-->
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -13,7 +13,7 @@
   </ol>
 {% endblock %}
 
-{%block content%}
+{% block content %}
 <div class="card-body">
     <span>{{msg}}</span>
     <div class="menu-upload-form">
@@ -21,18 +21,20 @@
           {% csrf_token %}
         <div class="form-group">
             <label class="col-sm-2 control-label">Product Name</label>
-            <div class="col-sm-10" style="max-width:36.3333%;">
+            <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Product Name" name="product_name" value="{{product_name}}" required >
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label"> Update Image</label>
-            <img src="{{file_name.url}}"  height="100px" width="200px"></td><br>
-            <div class="col-sm-10" style="max-width:36.3333%;">
+            <div class="col-sm-6" style="float: right;">
+                <img src="{{file_name.url}}" id="imageShow"  alt="Image Not Uploaded" height="100px" width="200px" style="float: left; display: inline-block;">
+            </div>
+            <div class="col-sm-4">
                 <div class="form-control">
-                    <span class="btn dark-input-button">
-                        <input type="file" name="file_name" >
+                    <span class="">
+                        <input type="file" name="file_name" onchange="upload_img(this);" id="imageUpload" >
                         <i class="fa fa-file-archive-o"></i>
                     </span>
                 </div>
@@ -42,11 +44,11 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Category</label>
-            <div class="col-sm-10" style="max-width:36.3333%;">
+            <div class="col-sm-10">
              <select name="category" class="form-control" required>
                     <!-- <option value="{{category.id}}">{{category.cat_name}}</option> -->
                     {% for i in cat_data%}
-                    {% if i == category.id  %}
+                    {% if i.id == category.id  %}
                         <option value="{{i.id}}" selected="true">{{i.cat_name}}</option>
                     {% endif %}
                         <option value="{{i.id}}">{{i.cat_name}}</option>
@@ -58,7 +60,7 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Product Descriptions</label>
-            <div class="col-sm-10" style="max-width:36.3333%;">
+            <div class="col-sm-10">
                 <textarea class="form-control" rows="3" placeholder="Add Descriptions..." name="product_details">{{description}}</textarea>
             </div>
         </div>
@@ -71,4 +73,38 @@
     </form>
     </div>
 </div>
-{%endblock%}
+{% endblock %}
+
+{% block js %}
+{% load static %}
+      <!-- Bootstrap core JavaScript-->
+      <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+      <!-- Core plugin JavaScript-->
+      <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+      <!-- Page level plugin JavaScript-->
+      <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+      <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+      <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+
+      <!-- Custom scripts for all pages-->
+      <script src="{% static 'js/sb-admin.min.js' %}"></script>
+      <!-- Image Upload Js -->
+      <script type="text/javascript">
+        // 
+        function upload_img(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imageShow').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+      </script>
+
+{% endblock %}
